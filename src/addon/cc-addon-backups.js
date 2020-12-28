@@ -85,6 +85,14 @@ export class CcAddonBackups extends LitElement {
         return i18n('cc-addon-backups.description.es-addon');
       case 'es-addon-old':
         return i18n('cc-addon-backups.description.es-addon-old');
+      case 'postgresql-addon':
+        return i18n('cc-addon-backups.description.postgresql-addon');
+      case 'mysql-addon':
+        return i18n('cc-addon-backups.description.mysql-addon');
+      case 'mongodb-addon':
+        return i18n('cc-addon-backups.description.mongodb-addon');
+      case 'redis-addon':
+        return i18n('cc-addon-backups.description.redis-addon');
       default:
         return fakeString(150);
     }
@@ -102,6 +110,14 @@ export class CcAddonBackups extends LitElement {
         return i18n('cc-addon-backups.link.es-addon');
       case 'es-addon-old':
         return i18n('cc-addon-backups.link.es-addon-old');
+      case 'postgresql-addon':
+        return i18n('cc-addon-backups.link.postgresql-addon');
+      case 'mysql-addon':
+        return i18n('cc-addon-backups.link.mysql-addon');
+      case 'mongodb-addon':
+        return i18n('cc-addon-backups.link.mongodb-addon');
+      case 'redis-addon':
+        return i18n('cc-addon-backups.link.redis-addon');
       default:
         return fakeString(18);
     }
@@ -141,6 +157,14 @@ export class CcAddonBackups extends LitElement {
       case 'es-addon':
       case 'es-addon-old':
         return i18n('cc-addon-backups.restore.manual.description.es-addon');
+      case 'postgresql-addon':
+        return i18n('cc-addon-backups.restore.manual.description.postgresql-addon');
+      case 'mysql-addon':
+        return i18n('cc-addon-backups.restore.manual.description.mysql-addon');
+      case 'mongodb-addon':
+        return i18n('cc-addon-backups.restore.manual.description.mongodb-addon');
+      case 'redis-addon':
+        return i18n('cc-addon-backups.restore.manual.description.redis-addon');
       default:
         return fakeString(70);
     }
@@ -223,7 +247,9 @@ export class CcAddonBackups extends LitElement {
                   <br>
                   ${ccLink(this._overlay == null ? backup.url : null, this._getBackupLink(providerId), skeleton)}
                   <cc-button link ?disabled=${this._overlay != null} ?skeleton=${skeleton} @cc-button:click=${(e) => this._onOpenOverlay(e, 'restore', backup)}>${i18n('cc-addon-backups.restore.btn')}</cc-button>
-                  <cc-button link ?disabled=${this._overlay != null} ?skeleton=${skeleton} @cc-button:click=${(e) => this._onOpenOverlay(e, 'delete', backup)}>${i18n('cc-addon-backups.delete.btn')}</cc-button>
+                  ${backup.deleteCommand != null ? html`
+                    <cc-button link ?disabled=${this._overlay != null} ?skeleton=${skeleton} @cc-button:click=${(e) => this._onOpenOverlay(e, 'delete', backup)}>${i18n('cc-addon-backups.delete.btn')}</cc-button>
+                  ` : ''}
                 </span>
               </div>
             `)}
@@ -260,9 +286,11 @@ export class CcAddonBackups extends LitElement {
               <cc-block-section>
                 <div slot="title">${i18n('cc-addon-backups.restore.manual.title')}</div>
                 <div>${this._getManualRestoreDescription(providerId)}</div>
-                <cc-input-text readonly clipboard value="${this._selectedBackup.restoreCommand}"></cc-input-text>
-                <div>${i18n('cc-addon-backups.command-password')}</div>
-                <cc-input-text readonly clipboard secret value=${passwordForCommand}></cc-input-text>
+                ${this._selectedBackup.restoreCommand != null ? html`
+                  <cc-input-text readonly clipboard value="${this._selectedBackup.restoreCommand}"></cc-input-text>
+                  <div>${i18n('cc-addon-backups.command-password')}</div>
+                  <cc-input-text readonly clipboard secret value=${passwordForCommand}></cc-input-text>
+                ` : ``}
               </cc-block-section>
             </cc-block>
           </div>
